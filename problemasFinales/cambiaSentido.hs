@@ -2,8 +2,11 @@ cambiaSentido :: Ord a => [a] -> Maybe a
 cambiaSentido xs =
     if or (checkList xs, checkList2 xs) 
         then Nothing 
-        else do let x = head xs
+        else do let x = revisaCambiaSentido xs
                 Just x
+
+revisaCambiaSentido:: [Int] -> Int
+revisaCambiaSentido (h:e:xs) = [ x | x <- xs , revisaCambiaSentido ]
 
 checkList :: (Ord a) => [a] -> Bool
 checkList [] = True
