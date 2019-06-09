@@ -17,8 +17,12 @@ main = do
     let dulcesRandom = listaAleatoriaInteger jugadores
     let dulcesPares = [ if odd x then x+1 else x | x <- dulcesRandom]
     let listaJugadores = [ (x,y) | (x,y) <- zip [1..] dulcesPares]
-    let resultado = reparte listaJugadores
-    print resultado
+    
+    let residuo = aplausos listaJugadores
+    let ordenada = finalACabeza residuo
+    let listaSuma = sumaListas residuo ordenada
+
+    reparte listaSuma
 
 aplausos listaJugadores = [ verifica (snd x) | x <- listaJugadores]
     where verifica y    | (y `div` 2) `mod` 2 == 0 = y `div` 2
@@ -34,27 +38,17 @@ finalACabeza xs = last xs : init xs
 sumaListas ::  [Int] -> [Int] -> [Int]
 sumaListas lista1 lista2 = zipWith (+) lista1 lista2
 
---todoIgual :: [Int] -> Bool
---todoIgual [] = True
---todoIgual (h:t) = todoIgual (Just h)
---todoIgual (Just e)
---	| h == e = todoIgual (Just e)
- --   | True = False
-
 todoIgual :: Eq a => [a] -> Bool
 todoIgual []     = True
 todoIgual (x:xs) = all (== x) xs
     
-reparte :: [(Integer,Int)] -> [Int]
+reparte :: [Int] -> [Int]
 reparte listaJugadores = do
     let residuo = aplausos listaJugadores
     let ordenada = finalACabeza residuo
-    let listaSuma = sumaListas residuo ordenada
+    let listaSuma2 = sumaListas residuo ordenada
 
-    show residuo
-    show ordenada
-    show listaSuma
-    let repartido = [ (x,y) | (x,y) <- zip [1..] listaSuma]
-    if todoIgual listaSuma == False
+    print listaSuma2
+    if todoIgual listaSuma2 == False
         then reparte repartido
-        else listaSuma
+        else listaSuma2 

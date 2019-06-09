@@ -1,19 +1,15 @@
-cambiaSentido :: Ord a => [a] -> Maybe a
+cambiaSentido :: Ord a => [a] -> Maybe [a]
 cambiaSentido xs =
-    if or (checkList xs, checkList2 xs) 
+    if or (checkListAsc xs, checkListDes xs) 
         then Nothing 
-        else do let x = revisaCambiaSentido xs
-                Just x
+        else do Just xs
 
-revisaCambiaSentido:: [Int] -> Int
-revisaCambiaSentido (h:e:xs) = [ x | x <- xs , revisaCambiaSentido ]
+checkListAsc :: (Ord a) => [a] -> Bool
+checkListAsc [] = True
+checkListAsc [x] = True
+checkListAsc (x:y:xs) = x < y && checkListAsc (y:xs)
 
-checkList :: (Ord a) => [a] -> Bool
-checkList [] = True
-checkList [x] = True
-checkList (x:y:xs) = x <= y && checkList (y:xs)
-
-checkList2 :: (Ord a) => [a] -> Bool
-checkList2 [] = True
-checkList2 [x] = True
-checkList2 (x:y:xs) = x >= y && checkList2 (y:xs)
+checkListDes :: (Ord a) => [a] -> Bool
+checkListDes [] = True
+checkListDes [x] = True
+checkListDes (x:y:xs) = x >= y && checkListDes (y:xs)

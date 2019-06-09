@@ -1,20 +1,7 @@
 import System.Random
 import Data.List 
 
-buscaVerdes :: [Int] -> [Int] -> [String]
-buscaVerdes xs ys = [ valida x y | (x,y) <- zip xs ys ]
-    where valida x y    | x == y = "V"
-                        | otherwise = "X"
-
-buscaAmarillas :: [Int] -> [Int] -> [String]
-buscaAmarillas xs ys = [ valida x | x <- ys ]
-    where valida x      | x `elem` xs = "A"
-                        | otherwise = "R"
-
---main :: IO()
-adivina = do
-
-    -- Generamos los numeros aleatorios
+main = do
     a <- randomRIO(1, 6 ::Int)
     b <- randomRIO(1, 6 ::Int)
     c <- randomRIO(1, 6) 
@@ -31,39 +18,44 @@ adivina = do
     r <- randomRIO(1, 6)
     z <- randomRIO(1, 6)
 	
-    -- los guardamos en una lista
-	--let numbers = a:[ b, c, d]
-    let numbers = take 4(nub (a:[ b, c, d,e,f,h,j,k,u,t,p,q,r,z]))
+    let numeros = take 4(nub (a:[ b, c, d,e,f,h,j,k,u,t,p,q,r,z]))
   
------------------------------------
-    pideNumeros numbers
+    inicia numeros
     print ""
 
-pideNumeros numbers = do
-    putStr "Escribe un numero: "
+
+correcto :: [Int] -> [Int] -> [String]
+correcto xs ys = [ validar x y | (x,y) <- zip xs ys ]
+    where validar x y    | x == y = "V"
+                        | otherwise = "X"
+
+desordenada :: [Int] -> [Int] -> [String]
+desordenada xs ys = [ validar x | x <- ys ]
+    where validar x      | x `elem` xs = "A"
+                        | otherwise = "R"
+
+inicia numeros = do
+    putStr "Dame el primer numero: "
     e <- readLn :: IO Int
-    putStr "Escribe un numero: "
+    putStr "Dame el segundo numero: "
     f <- readLn :: IO Int
-    putStr "Escribe un numero: "
+    putStr "Dame el tercer numero: "
     g <- readLn :: IO Int
-    putStr "Escribe un numero: "
+    putStr "Dame el tercer numero: "
     h <- readLn :: IO Int
 
-    let numbers2= e:[f,g,h]
-    
-    --print numbers
-    -- print numbers2
+    let numeros2= e:[f,g,h]
 
-    let m = buscaVerdes numbers numbers2
-    let borraXVerdes = [ x | x <- m , x /= "X" ]
-    let longitudVerdes = length borraXVerdes
+    let m = correcto numeros numeros2
+    let borraCorrectas = [ x | x <- m , x /= "X" ]
+    let longitudCorrectas = length borraCorrectas
 
-    let l = buscaAmarillas numbers numbers2
-    let listaAmarillasOrdenadas = drop longitudVerdes (sort l)
+    let l = desordenada numeros numeros2
+    let desordenadasOrdenadas = drop longitudCorrectas (sort l)
 
-    let resultado = borraXVerdes ++ listaAmarillasOrdenadas
+    let resultado = borraCorrectas ++ desordenadasOrdenadas
     print resultado
 
-    if longitudVerdes /= 4
-        then pideNumeros numbers
-        else print "Felicidades, has ganado un 70 en la materia de PROLOG, PORFI PROFE :C"
+    if longitudCorrectas /= 4
+        then inicia numeros
+        else print "Felicidades!! Ganaste!!"
